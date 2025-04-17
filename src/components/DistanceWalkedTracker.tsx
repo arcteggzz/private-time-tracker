@@ -12,6 +12,7 @@ interface WalkEntry {
   totalDuration: string;
   averageSpeed: string;
   distanceCovered: string;
+  distanceCoveredInMeters: string;
   date: string;
   startPointCoordinate: Coordinates;
   endPointCoordinate: Coordinates;
@@ -72,6 +73,7 @@ const DistanceWalkedTracker: React.FC = () => {
     setTimer(0);
     startTimeRef.current = new Date();
     pathRef.current = [];
+    setDistance(0);
 
     const id = navigator.geolocation.watchPosition(
       (pos) => {
@@ -83,10 +85,12 @@ const DistanceWalkedTracker: React.FC = () => {
         if (!startCoord) setStartCoord(coords);
         pathRef.current.push(coords);
 
-        if (pathRef.current.length > 1) {
+        if (pathRef.current.length >= 2) {
           const last = pathRef.current[pathRef.current.length - 2];
           const dist = getDistance(last, coords);
-          setDistance((prev) => prev + dist);
+
+          // ✅ Use functional update to avoid stale state
+          setDistance((prevDistance) => prevDistance + dist);
         }
       },
       (err) => {
@@ -95,12 +99,13 @@ const DistanceWalkedTracker: React.FC = () => {
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 1000,
-        timeout: 10000,
+        maximumAge: 100,
+        timeout: 5000,
       }
     );
     setWatchId(id);
 
+    // ✅ Timer
     timerRef.current = setInterval(() => {
       setTimer((prev) => prev + 1);
     }, 1000);
@@ -131,6 +136,7 @@ const DistanceWalkedTracker: React.FC = () => {
       totalDuration: toHHMMSS(durationSeconds),
       averageSpeed: `${avgSpeed.toFixed(2)} km/h`,
       distanceCovered: `${distanceInKm.toFixed(2)} km`,
+      distanceCoveredInMeters: `${distance.toFixed(2)} m`,
       date: formattedDate,
       startPointCoordinate: startCoord!,
       endPointCoordinate: endCoord,
@@ -198,7 +204,7 @@ const DistanceWalkedTracker: React.FC = () => {
       ) : tracking ? (
         <div className="flex flex-col items-center gap-4">
           <p className="text-lg">Time: {toHHMMSS(timer)}</p>
-          <p className="text-lg">Distance: {(distance / 1000).toFixed(2)} km</p>
+          <p className="text-lg">Distance: {distance.toFixed(2)} meters</p>
           <button
             onClick={stopTracking}
             className="bg-[#6e56b6] text-white px-6 py-3 rounded-lg cursor-pointer"
