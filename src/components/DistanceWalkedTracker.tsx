@@ -26,11 +26,15 @@ const DistanceWalkedTracker: React.FC = () => {
   const [startCoord, setStartCoord] = useState<Coordinates | null>(null);
   const [distance, setDistance] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [walkEntry, setWalkEntry] = useState<WalkEntry | null>(null);
-  const startTimeRef = useRef<Date | null>(null);
+  const [, setWalkEntry] = useState<WalkEntry | null>(null);
+  const [walkEntries, setWalkEntries] = useState<WalkEntry[]>([]);
+  const [selectedEntry, setSelectedEntry] = useState<WalkEntry | null>(null);
 
+  const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pathRef = useRef<Coordinates[]>([]);
+
+  const todayDate = new Date().toLocaleDateString("en-NG");
 
   const toHHMMSS = (seconds: number) => {
     const h = Math.floor(seconds / 3600)
@@ -47,7 +51,7 @@ const DistanceWalkedTracker: React.FC = () => {
 
   const getDistance = (coord1: Coordinates, coord2: Coordinates): number => {
     const toRad = (value: number) => (value * Math.PI) / 180;
-    const R = 6371e3; // meters
+    const R = 6371e3;
     const φ1 = toRad(coord1.latitude);
     const φ2 = toRad(coord2.latitude);
     const Δφ = toRad(coord2.latitude - coord1.latitude);
@@ -58,7 +62,7 @@ const DistanceWalkedTracker: React.FC = () => {
       Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return R * c; // in meters
+    return R * c;
   };
 
   const enableLocation = () => {
@@ -88,8 +92,6 @@ const DistanceWalkedTracker: React.FC = () => {
         if (pathRef.current.length >= 2) {
           const last = pathRef.current[pathRef.current.length - 2];
           const dist = getDistance(last, coords);
-
-          // ✅ Use functional update to avoid stale state
           setDistance((prevDistance) => prevDistance + dist);
         }
       },
@@ -104,16 +106,12 @@ const DistanceWalkedTracker: React.FC = () => {
       }
     );
     setWatchId(id);
-
-    // ✅ Timer
     timerRef.current = setInterval(() => {
       setTimer((prev) => prev + 1);
     }, 1000);
   };
 
-  const stopTracking = () => {
-    setShowModal(true);
-  };
+  const stopTracking = () => setShowModal(true);
 
   const confirmStop = () => {
     const endTime = new Date();
@@ -124,10 +122,9 @@ const DistanceWalkedTracker: React.FC = () => {
 
     const durationSeconds = timer;
     const distanceInKm = distance / 1000;
-    const avgSpeed = distanceInKm / (durationSeconds / 3600); // km/hr
+    const avgSpeed = distanceInKm / (durationSeconds / 3600);
 
-    const date = new Date();
-    const formattedDate = date.toLocaleDateString("en-NG");
+    const date = new Date().toLocaleDateString("en-NG");
 
     const entry: WalkEntry = {
       id: Date.now(),
@@ -137,13 +134,15 @@ const DistanceWalkedTracker: React.FC = () => {
       averageSpeed: `${avgSpeed.toFixed(2)} km/h`,
       distanceCovered: `${distanceInKm.toFixed(2)} km`,
       distanceCoveredInMeters: `${distance.toFixed(2)} m`,
-      date: formattedDate,
+      date,
       startPointCoordinate: startCoord!,
       endPointCoordinate: endCoord,
     };
 
     const existing = JSON.parse(localStorage.getItem("walkSessions") || "[]");
-    localStorage.setItem("walkSessions", JSON.stringify([...existing, entry]));
+    const updatedEntries = [...existing, entry];
+    localStorage.setItem("walkSessions", JSON.stringify(updatedEntries));
+    setWalkEntries(updatedEntries);
 
     setWalkEntry(entry);
     setShowModal(false);
@@ -153,23 +152,23 @@ const DistanceWalkedTracker: React.FC = () => {
     setTimer(0);
   };
 
-  const resetSession = () => {
-    setWalkEntry(null);
-  };
+  // const resetSession = () => {
+  //   setWalkEntry(null);
+  // };
 
   useEffect(() => {
-    // Check permission on mount
     navigator.permissions
       ?.query({ name: "geolocation" as PermissionName })
       .then((res) => {
         if (res.state === "granted") setLocationEnabled(true);
       });
+
+    const stored = JSON.parse(localStorage.getItem("walkSessions") || "[]");
+    setWalkEntries(stored);
   }, []);
 
   return (
-    <div
-      className={`w-screen min-h-screen bg-white text-black font-[Inter] p-6 flex items-center justify-center`}
-    >
+    <div className="w-screen min-h-screen bg-white text-black font-[Inter] p-6 flex items-center justify-center">
       {!locationEnabled ? (
         <div className="flex flex-col items-center justify-center h-full">
           <p className="text-lg mb-4">Location Required</p>
@@ -180,10 +179,10 @@ const DistanceWalkedTracker: React.FC = () => {
             Enable location
           </button>
         </div>
-      ) : walkEntry ? (
+      ) : selectedEntry ? (
         <div className="flex flex-col gap-4 max-w-md mx-auto">
-          <h2 className="text-xl font-semibold mb-2">Walk Summary</h2>
-          {Object.entries(walkEntry).map(([key, value]) => (
+          <h2 className="text-xl font-semibold mb-2">Entry Details</h2>
+          {Object.entries(selectedEntry).map(([key, value]) => (
             <div
               key={key}
               className="flex flex-col md:flex-row justify-between gap-2"
@@ -195,10 +194,10 @@ const DistanceWalkedTracker: React.FC = () => {
             </div>
           ))}
           <button
-            className="bg-[#6e56b6] text-white px-4 py-2 rounded-lg mt-6 cursor-pointer"
-            onClick={resetSession}
+            onClick={() => setSelectedEntry(null)}
+            className="mt-6 bg-gray-300 text-black px-4 py-2 rounded-lg"
           >
-            Start New Session
+            Back to List
           </button>
         </div>
       ) : tracking ? (
@@ -213,17 +212,39 @@ const DistanceWalkedTracker: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
+          <div className="flex flex-col mb-2">
+            <h2 className="text-xl font-semibold">Previous Walks</h2>
+            <h2 className="text-[12px]">Current Date: {todayDate}</h2>
+          </div>
+
+          {walkEntries.length === 0 ? (
+            <p className="text-sm text-gray-600">No walk sessions yet.</p>
+          ) : (
+            walkEntries.map((entry, index) => (
+              <div
+                key={entry.id}
+                className="p-4 bg-gray-100 rounded-xl shadow-md cursor-pointer hover:bg-gray-200 transition"
+                onClick={() => setSelectedEntry(entry)}
+              >
+                <p className="font-bold text-sm">#{index + 1}</p>
+                <p>Distance: {entry.distanceCoveredInMeters}</p>
+                <p>Date: {entry.date}</p>
+                <p>End Time: {entry.endTime}</p>
+                <p>Duration: {entry.totalDuration}</p>
+              </div>
+            ))
+          )}
+
           <button
             onClick={startTracking}
-            className="bg-[#6e56b6] text-white px-6 py-3 rounded-lg cursor-pointer"
+            className="bg-[#6e56b6] text-white px-6 py-3 rounded-lg mt-6 cursor-pointer"
           >
-            Start
+            Start New Walk Session
           </button>
         </div>
       )}
 
-      {/* Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white text-black rounded-xl p-6 shadow-lg max-w-sm w-full">
