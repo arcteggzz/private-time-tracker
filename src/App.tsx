@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import NavMenu from "./components/NavMenu";
 import ButtonWithModal from "./components/ButtonWithModal";
 import DistanceWalkedTracker from "./components/DistanceWalkedTracker";
+import ImposterGame from "./components/ImposterGame";
 
 function App() {
   const location = useLocation();
@@ -12,6 +13,7 @@ function App() {
         <Route path={"/"} element={<NavMenu />} />
         <Route path={"v2/app_1"} element={<ButtonWithModal />} />
         <Route path={"v2/app_2"} element={<DistanceWalkedTracker />} />
+        <Route path={"v2/app_3"} element={<ImposterGame />} />
       </Routes>
     </>
   );

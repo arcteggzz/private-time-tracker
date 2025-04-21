@@ -10,6 +10,10 @@ function NavMenu() {
       title: "Walks",
       route: "/v2/app_2",
     },
+    {
+      title: "Imposter Game",
+      route: "/v2/app_3",
+    },
   ];
 
   return (
