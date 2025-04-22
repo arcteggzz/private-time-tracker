@@ -139,14 +139,10 @@ const ImposterGame: React.FC = () => {
     if (cat) {
       const words = [...cat.wordsInCategory];
       const normalWord = words[Math.floor(Math.random() * words.length)];
-      let imposterWord;
-      do {
-        imposterWord = words[Math.floor(Math.random() * words.length)];
-      } while (imposterWord === normalWord);
 
       const wordsForPlayers = Array(numPlayers!).fill(normalWord);
       const imposterIndex = Math.floor(Math.random() * numPlayers!);
-      wordsForPlayers[imposterIndex] = imposterWord;
+      wordsForPlayers[imposterIndex] = "Imposter";
 
       setPlayerWords(wordsForPlayers);
       setShowCategorySelect(false);
