@@ -7,12 +7,16 @@ function NavMenu() {
       route: "/v2/app_1",
     },
     {
-      title: "Walks",
+      title: "Walks Tracker",
       route: "/v2/app_2",
     },
     {
       title: "Imposter Game",
       route: "/v2/app_3",
+    },
+    {
+      title: "Video Shorts",
+      route: "/v2/app_4",
     },
   ];
 

@@ -13,10 +13,29 @@ interface WalkEntry {
   averageSpeed: string;
   distanceCovered: string;
   distanceCoveredInMeters: string;
+  amountEarned: string;
   date: string;
   startPointCoordinate: Coordinates;
   endPointCoordinate: Coordinates;
 }
+
+const perAmount = 0.1;
+
+const formatPriceInNaira = (
+  rawAmount: string | number,
+  minimumFractionDigits = 0,
+  maximumFractionDigits = 0
+): string => {
+  const amount = +rawAmount;
+  if (amount === undefined) return "";
+
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: minimumFractionDigits,
+    maximumFractionDigits: maximumFractionDigits,
+  }).format(amount);
+};
 
 const DistanceWalkedTracker: React.FC = () => {
   const [locationEnabled, setLocationEnabled] = useState(false);
@@ -134,6 +153,7 @@ const DistanceWalkedTracker: React.FC = () => {
       averageSpeed: `${avgSpeed.toFixed(2)} km/h`,
       distanceCovered: `${distanceInKm.toFixed(2)} km`,
       distanceCoveredInMeters: `${distance.toFixed(2)} m`,
+      amountEarned: `${formatPriceInNaira(distance * perAmount, 2, 2)}`,
       date,
       startPointCoordinate: startCoord!,
       endPointCoordinate: endCoord,
@@ -195,7 +215,7 @@ const DistanceWalkedTracker: React.FC = () => {
           ))}
           <button
             onClick={() => setSelectedEntry(null)}
-            className="mt-6 bg-gray-300 text-black px-4 py-2 rounded-lg"
+            className="mt-6 bg-gray-300 text-black px-4 py-2 rounded-lg cursor-pointer"
           >
             Back to List
           </button>
@@ -204,6 +224,9 @@ const DistanceWalkedTracker: React.FC = () => {
         <div className="flex flex-col items-center gap-4">
           <p className="text-lg">Time: {toHHMMSS(timer)}</p>
           <p className="text-lg">Distance: {distance.toFixed(2)} meters</p>
+          <p className="text-lg">
+            Amount Earned: {formatPriceInNaira(distance * perAmount, 2, 2)}
+          </p>
           <button
             onClick={stopTracking}
             className="bg-[#6e56b6] text-white px-6 py-3 rounded-lg cursor-pointer"
@@ -229,6 +252,7 @@ const DistanceWalkedTracker: React.FC = () => {
               >
                 <p className="font-bold text-sm">#{index + 1}</p>
                 <p>Distance: {entry.distanceCoveredInMeters}</p>
+                <p>Amount Earned: {entry.amountEarned}</p>
                 <p>Date: {entry.date}</p>
                 <p>End Time: {entry.endTime}</p>
                 <p>Duration: {entry.totalDuration}</p>
