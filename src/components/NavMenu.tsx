@@ -18,6 +18,10 @@ function NavMenu() {
       title: "Video Shorts",
       route: "/v2/app_4",
     },
+    {
+      title: "Fusion Reels Demo",
+      route: "/v2/app_5/a1",
+    },
   ];
 
   return (

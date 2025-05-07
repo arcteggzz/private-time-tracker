@@ -4,6 +4,7 @@ import ButtonWithModal from "./components/ButtonWithModal";
 import DistanceWalkedTracker from "./components/DistanceWalkedTracker";
 import ImposterGame from "./components/ImposterGame";
 import VideoShort from "./components/VideoShort";
+import Reels from "./components/Reels";
 
 function App() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function App() {
         <Route path={"v2/app_2"} element={<DistanceWalkedTracker />} />
         <Route path={"v2/app_3"} element={<ImposterGame />} />
         <Route path={"v2/app_4"} element={<VideoShort />} />
+        <Route path={"v2/app_5/:videoId"} element={<Reels />} />
       </Routes>
     </>
   );
