@@ -22,6 +22,10 @@ function NavMenu() {
       title: "Fusion Reels Demo",
       route: "/v2/app_5/a1",
     },
+    {
+      title: "Listen Up!",
+      route: "/v2/app_6",
+    },
   ];
 
   return (

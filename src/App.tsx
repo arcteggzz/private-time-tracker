@@ -5,6 +5,7 @@ import DistanceWalkedTracker from "./components/DistanceWalkedTracker";
 import ImposterGame from "./components/ImposterGame";
 import VideoShort from "./components/VideoShort";
 import Reels from "./components/Reels";
+import ListenUp from "./components/ListenUp";
 
 function App() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function App() {
         <Route path={"v2/app_3"} element={<ImposterGame />} />
         <Route path={"v2/app_4"} element={<VideoShort />} />
         <Route path={"v2/app_5/:videoId"} element={<Reels />} />
+        <Route path={"v2/app_6"} element={<ListenUp />} />
       </Routes>
     </>
   );
