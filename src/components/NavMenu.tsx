@@ -26,6 +26,10 @@ function NavMenu() {
       title: "Listen Up!",
       route: "/v2/app_6",
     },
+    {
+      title: "Tangle Text",
+      route: "/v2/app_7",
+    },
   ];
 
   return (

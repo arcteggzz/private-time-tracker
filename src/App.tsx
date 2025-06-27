@@ -6,6 +6,7 @@ import ImposterGame from "./components/ImposterGame";
 import VideoShort from "./components/VideoShort";
 import Reels from "./components/Reels";
 import ListenUp from "./components/ListenUp";
+import TangleText from "./components/TangleText";
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
         <Route path={"v2/app_4"} element={<VideoShort />} />
         <Route path={"v2/app_5/:videoId"} element={<Reels />} />
         <Route path={"v2/app_6"} element={<ListenUp />} />
+        <Route path={"v2/app_7"} element={<TangleText />} />
       </Routes>
     </>
   );
