@@ -30,20 +30,30 @@ function NavMenu() {
       title: "Tangle Text",
       route: "/v2/app_7",
     },
+    {
+      title: "Wallet Creation Flow",
+      route: "/v2/app_8",
+    },
+    {
+      title: "Wallet Management",
+      route: "/v2/app_9",
+    },
   ];
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col items-center justify-center font-[Inter] gap-2">
-        {links.map((link) => (
-          <Link
-            key={link.route}
-            to={link.route}
-            className="bg-[#6e56b6] text-white px-4 py-2 rounded-lg mt-6 cursor-pointer"
-          >
-            {link.title}
-          </Link>
-        ))}
+      <div className="w-screen h-screen flex items-center justify-center font-[Inter]">
+        <div className="sm:max-w-xl grid grid-cols-2 items-center justify-center font-[Inter] gap-2">
+          {links.map((link) => (
+            <Link
+              key={link.route}
+              to={link.route}
+              className="bg-[#6e56b6] text-white px-4 py-2 rounded-lg mt-6 cursor-pointer text-center"
+            >
+              {link.title}
+            </Link>
+          ))}
+        </div>
       </div>
     </>
   );

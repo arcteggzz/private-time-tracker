@@ -7,6 +7,8 @@ import VideoShort from "./components/VideoShort";
 import Reels from "./components/Reels";
 import ListenUp from "./components/ListenUp";
 import TangleText from "./components/TangleText";
+import WalletCreationFlow from "./components/WalletCreationFlow";
+import WalletManagementFlow from "./components/WalletManagementFlow";
 
 function App() {
   const location = useLocation();
@@ -22,6 +24,8 @@ function App() {
         <Route path={"v2/app_5/:videoId"} element={<Reels />} />
         <Route path={"v2/app_6"} element={<ListenUp />} />
         <Route path={"v2/app_7"} element={<TangleText />} />
+        <Route path={"v2/app_8"} element={<WalletCreationFlow />} />
+        <Route path={"v2/app_9"} element={<WalletManagementFlow />} />
       </Routes>
     </>
   );
