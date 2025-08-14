@@ -12,6 +12,7 @@ import WalletManagementFlow from "./components/WalletManagementFlow";
 
 function App() {
   const location = useLocation();
+  console.log("Current location:", location);
 
   return (
     <>
