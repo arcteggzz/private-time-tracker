@@ -12,7 +12,7 @@ import WalletManagementFlow from "./components/WalletManagementFlow";
 import QRCodeViewer from "./components/QRCodeViewer";
 import Encrypt from "./components/Encrypt";
 import PostingHelper from "./components/PostingHelper";
-import ChartsPage from "./components/ChartsPage";
+// import ChartsPage from "./components/ChartsPage";
 
 function App() {
   const location = useLocation();
@@ -34,7 +34,7 @@ function App() {
         <Route path={"v2/app_10"} element={<QRCodeViewer />} />
         <Route path={"v2/app_11"} element={<Encrypt />} />
         <Route path={"v2/app_12"} element={<PostingHelper />} />
-        <Route path={"v2/app_13"} element={<ChartsPage />} />
+        {/* <Route path={"v2/app_13"} element={<ChartsPage />} /> */}
       </Routes>
     </>
   );
