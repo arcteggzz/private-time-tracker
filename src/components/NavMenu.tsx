@@ -38,6 +38,22 @@ function NavMenu() {
       title: "Wallet Management",
       route: "/v2/app_9",
     },
+    {
+      title: "QR Code Viewer",
+      route: "/v2/app_10",
+    },
+    {
+      title: "Encryption Demo",
+      route: "/v2/app_11",
+    },
+    {
+      title: "PostingHelper",
+      route: "/v2/app_12",
+    },
+    {
+      title: "Charts Page",
+      route: "/v2/app_13",
+    },
   ];
 
   return (
