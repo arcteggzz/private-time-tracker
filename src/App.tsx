@@ -11,12 +11,14 @@ import WalletCreationFlow from "./components/WalletCreationFlow";
 import WalletManagementFlow from "./components/WalletManagementFlow";
 import QRCodeViewer from "./components/QRCodeViewer";
 import Encrypt from "./components/Encrypt";
-import PostingHelper from "./components/PostingHelper";
-// import ChartsPage from "./components/ChartsPage";
+// import PostingHelper from "./components/PostingHelper";
+// // import ChartsPage from "./components/ChartsPage";
+// import CloseAccounts from "./components/CloseAccounts";
+// import JsonFixer from "./components/JsonFixer";
+// import OnboardTapBulk from "./components/OnboardTapBulk";
 
 function App() {
   const location = useLocation();
-  console.log("Current location:", location);
 
   return (
     <>
@@ -33,8 +35,11 @@ function App() {
         <Route path={"v2/app_9"} element={<WalletManagementFlow />} />
         <Route path={"v2/app_10"} element={<QRCodeViewer />} />
         <Route path={"v2/app_11"} element={<Encrypt />} />
-        <Route path={"v2/app_12"} element={<PostingHelper />} />
+        {/* <Route path={"v2/app_12"} element={<PostingHelper />} /> */}
         {/* <Route path={"v2/app_13"} element={<ChartsPage />} /> */}
+        {/* <Route path={"v2/app_14"} element={<CloseAccounts />} />
+        <Route path={"v2/app_15"} element={<JsonFixer />} />
+        <Route path={"v2/app_16"} element={<OnboardTapBulk />} /> */}
       </Routes>
     </>
   );
