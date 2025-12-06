@@ -1,4 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import NavMenu from "./components/NavMenu";
 import ButtonWithModal from "./components/ButtonWithModal";
 import DistanceWalkedTracker from "./components/DistanceWalkedTracker";
@@ -22,6 +23,24 @@ import CustomerPayment from "./components/CustomerPayment";
 
 function App() {
   const location = useLocation();
+
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    const correctPassword = "mypassword123"; // 🔐 CHANGE THIS
+    const enteredPassword = prompt("Enter password to access this app:");
+
+    if (enteredPassword === correctPassword) {
+      setAuthorized(true);
+    } else {
+      alert("Incorrect password. Access denied.");
+      window.location.reload(); // or redirect to another page
+    }
+  }, []);
+
+  if (!authorized) {
+    return <div>Unnauthorized, Reach out to Tega for Help...</div>; // or a loading screen
+  }
 
   return (
     <>
