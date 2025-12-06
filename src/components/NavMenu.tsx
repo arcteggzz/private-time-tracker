@@ -54,6 +54,18 @@ function NavMenu() {
       title: "Charts Page",
       route: "/v2/app_13",
     },
+    {
+      title: "Liquidation Calculator",
+      route: "/v2/app_17",
+    },
+    {
+      title: "Merchant QrCode",
+      route: "/v2/app_18",
+    },
+    {
+      title: "Customer Payment",
+      route: "/v2/customer-payment",
+    },
   ];
 
   return (
